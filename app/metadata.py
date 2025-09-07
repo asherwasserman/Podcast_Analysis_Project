@@ -10,6 +10,7 @@ class Metadata:
         metadata_list = []
         path = Path(self.file_path)
         stat  = path.stat()
+        metadata_list.append({"file_path" :self.file_path})
         metadata_list.append({"name": path.name})
         metadata_list.append({"file_extension": path.suffix})
         metadata_list.append({"size": stat.st_size})
