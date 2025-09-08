@@ -11,5 +11,3 @@ class PublisherManager:
         for file_path in self.file_paths:
             metadata = Metadata(rf"{file_path}").get_metadata()
             Producer().publish_message(topic, metadata)
-
-PublisherManager(r"C:\Users\user1\Desktop\podcasts").publish_to_kafka("test_topic")

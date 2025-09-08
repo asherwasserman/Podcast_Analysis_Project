@@ -29,5 +29,3 @@ class SubscriberManager:
                        (str(value["name"]) + str(value["size"]) + str(value["creation_date"])))
             elastic_conn.insert_one(value, hash_id)
             mongo_conn.push_audio_to_mongo_with_id(value["file_path"], hash_id)
-
-SubscriberManager("test_topic").push_to_mongo_and_elastic("podcast_details","a", "test_topic")
