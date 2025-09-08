@@ -7,15 +7,15 @@ class Metadata:
         self.file_path = file_path
 
     def get_metadata(self):
-        metadata_list = []
+        metadata_dict = {}
         path = Path(self.file_path)
         stat  = path.stat()
-        metadata_list.append({"file_path" :self.file_path})
-        metadata_list.append({"name": path.name})
-        metadata_list.append({"file_extension": path.suffix})
-        metadata_list.append({"size": stat.st_size})
-        metadata_list.append({"creation_date": stat.st_ctime})
-        metadata = json.dumps(metadata_list)
+        metadata_dict["file_path"] = self.file_path
+        metadata_dict["name"] = path.name
+        metadata_dict["file_extension"] = path.suffix
+        metadata_dict["size"] = stat.st_size
+        metadata_dict["creation_date"] = stat.st_ctime
+        metadata = json.dumps(metadata_dict)
         return metadata
 
 

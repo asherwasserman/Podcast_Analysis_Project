@@ -1,6 +1,5 @@
 from elasticsearch import Elasticsearch, helpers
 class ElasticsearchDal:
-
     def __init__(self, index):
         self.es = Elasticsearch("http://localhost:9200")
         self.index_name = index
