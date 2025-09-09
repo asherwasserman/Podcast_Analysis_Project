@@ -1,33 +1,25 @@
+from logging import exception
+
 from elasticsearch import Elasticsearch, helpers
+from logging_config.logger import Logger
 class ElasticsearchDal:
     def __init__(self, index):
-        self.es = Elasticsearch("http://localhost:9200")
+        self.logger = Logger.get_logger()
+        try:
+            self.es = Elasticsearch("http://localhost:9200")
+            self.logger.info("Login success to elastic search")
+        except Exception as e :
+            self.logger.error(f"Failed to connect to elastic search, error:{e}")
         self.index_name = index
 
-    def mapping_configuration(self, mapping):
-        self.es.options(ignore_status=[400, 404]).indices.delete(index=self.index_name)
-        self.es.indices.create(index=self.index_name,body=mapping)
-
+    # inserts one document to your index
     def insert_one(self, doc, doc_id=None):
-        res = self.es.index(index=self.index_name, id=doc_id, document=doc)
-        return res["_id"]
-
-    def get_by_id(self, doc_id):
         try:
-            return self.es.get(index=self.index_name, id=doc_id)["_source"]
-        except:
-            return None
-
-    def update_document(self, doc_id, fields):
-        res = self.es.update(index=self.index_name, id=doc_id, doc={"doc": fields})
-        return res
-
-    def add_mapping_fields(self, mapping):
-        self.es.indices.put_mapping(index=self.index_name,body=mapping)
-
-    def get_mapping(self):
-        mappings = self.es.indices.get_mapping(index=self.index_name)
-        return mappings
+            res = self.es.index(index=self.index_name, id=doc_id, document=doc)
+            self.logger.info(f"Document successfully added to your {self.index_name} index")
+            return res["_id"]
+        except Exception as e:
+            self.logger.error(f"Failed to add document, error:{e}")
 
     def delete_document(self, doc_id):
         self.es.delete(index=self.index_name, id=doc_id, ignore=[400, 404])
