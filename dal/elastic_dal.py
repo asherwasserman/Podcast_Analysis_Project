@@ -21,6 +21,32 @@ class ElasticsearchDal:
         except Exception as e:
             self.logger.error(f"Failed to add document, error:{e}")
 
+    def update_document(self, doc_id, fields):
+        try:
+            res = self.es.update(index=self.index_name, id=doc_id, doc= fields)
+            self.logger.info("Document updated successfully")
+            return res
+        except Exception as e:
+            self.logger.error(f"Failed to update document, error:{e}")
+
+    def insert_content_by_file_id(self, file_id, text):
+        query_body = {
+            "query": {
+                "match": {
+                    "file_id": file_id
+                }
+            },
+            "script": {
+                "source": f"ctx._source.{"content_text"} = params.new_val",
+                "lang": "painless",
+                "params": {
+                    "new_val": text
+                }
+            }
+        }
+        response = self.es.update_by_query(index=self.index_name, body=query_body)
+        return response
+
     def delete_document(self, doc_id):
         self.es.delete(index=self.index_name, id=doc_id, ignore=[400, 404])
 

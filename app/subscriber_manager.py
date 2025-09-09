@@ -19,10 +19,10 @@ class SubscriberManager:
         content_id = hash_object.hexdigest()
         return content_id
 
-    def push_to_mongo_and_elastic(self, db, collection,  index):
+    def push_to_mongo_and_elastic(self, db,  index):
         events = self.get_events()
         elastic_conn = ElasticsearchDal(index)
-        mongo_conn = MongoDAL( db_name=db, collection=collection)
+        mongo_conn = MongoDAL( db_name=db)
         for event in events:
             value = json.loads(event.value)
             hash_id = (self.create_id
