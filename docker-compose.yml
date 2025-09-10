@@ -37,12 +37,6 @@ services:
       - "9200:9200"
     networks:
       - Podcast_analysis_project_network
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
 
   kibana:
     image: docker.elastic.co/kibana/kibana:9.1.2
